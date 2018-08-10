@@ -1,0 +1,5 @@
+-create the board
+    - storing it as a two dimenstional array
+    - black = 0
+    - white = 1
+    - draw board, with pieces
