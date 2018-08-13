@@ -1,53 +1,75 @@
-
-function drawLine(ctx, x1, y1, x2, y2){
-    ctx.beginPath();
-    ctx.moveTo(x1, y1);
-    ctx.lineTo(x2, y2);
-    ctx.stroke();
-}
-
-function generate() {
+// game generator
+function generateGame() {
     var e = document.getElementById("mySelect").value;
     document.getElementById("demo").innerHTML = e;
-    document.write(e);
+    var canvas = document.getElementById("GomokuCanvas");
+    var context = canvas.getContext('2d');
+    var dim = 0;
     if (e == "19x19") {
-        var dim = 19;
-        width = 19;
-        height = 19;
+        dim = 19;
     }
     else if (e == "13x13") {
-        width = 13;
-        height = 13;
         dim = 13
     }
     else{
-        width = 9;
-        height = 9;
         dim = 9;
     }
+    mouseCords();
+    make2Darray(dim, context);
+}
+
+// get mouse coordinates
+function mouseCords(){
+    var context = document.getElementById('GomokuCanvas').getContext('2d');
+    context.canvas.addEventListener('click', function(event) {
+        var x = event.clientX;
+        var y = event.clientY;
+        document.getElementById('demo').innerHTML = "[X = " + x + "][Y = " + y + "]";
+    });
+}
+
+// generate the 2d array
+function make2Darray(dim, context){
     var myarray = new Array(dim)
     for (i = 0; i < dim; i++) {
         myarray[i] = new Array(dim);
     }
+    set2Darray(dim, myarray);
+    draw2Darray(myarray, context);
+}
+
+// set the empty 2d array
+function set2Darray(dim, myarray){
     for (var i = 0; i < dim; i++) {
         for (var j = 0; j < dim; j++) {
             myarray[i][j] = 0;
         }
     }
-    document.write(width);
-    document.write(height);
-    document.write("<br/>");
-    document.write("<br/>");
-    var canvas = document.getElementById("GomokuCanvas");
-    var ctx = canvas.getContext('2d');
-    drawLine(ctx, 0,0,canvas.width, 0);
-    drawLine(ctx, canvas.width, 0, canvas.width, canvas.height);
-    drawLine(ctx, canvas.width, canvas.height, 0, canvas.height);
-    drawLine(ctx, 0, canvas.height, 0,0);
-    for (var i = 0; i < dim; i++) {
-        for (var j = 0; j < dim; j++) {
-            document.write(myarray[i][j] + "&emsp;");
+}
+
+// draw the 2d array
+function draw2Darray(myarray, context){
+    for (var x = 0; x < myarray.length; x++) {
+        var y = 0;
+        while(y < myarray.length - 1) {
+            context.beginPath();
+            context.moveTo(0, y * 50);
+            context.lineTo(x * 50, y * 50);
+            context.stroke();
+            y++;
+            if (y == myarray.length - 1){
+                context.beginPath();
+                context.moveTo(0, y * 50);
+                context.lineTo(x * 50, y * 50);
+                context.stroke();   
+            }
         }
-        document.write("<br/>");
+        context.moveTo(x * 50, 0);
+        context.lineTo(x * 50, y * 50);
+        context.stroke();
     }
+}
+
+function drawPiece(){
+    
 }
